@@ -12,6 +12,9 @@ def download_instagram_video(url):
             post_metadata_txt_pattern=""
         )
 
+        # Load login session
+        loader.load_session_from_file("viewer_session.json")
+
         temp_dir = tempfile.mkdtemp()
         target_folder = "downloaded_post"
         loader.dirname_pattern = os.path.join(temp_dir, "{target}")
@@ -20,13 +23,11 @@ def download_instagram_video(url):
         loader.download_post(post, target=target_folder)
 
         post_path = os.path.join(temp_dir, target_folder)
-        print("Download folder:", post_path)
-
         for file in os.listdir(post_path):
             if file.endswith(".mp4"):
                 return os.path.join(post_path, file)
 
-        return None  # No video found
+        return None
 
     except Exception as e:
         print("Download error:", e)
